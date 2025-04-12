@@ -1,0 +1,160 @@
+body {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+}
+
+.form-card, #result {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.app-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.app-description {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #dce1e8;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.15);
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    border-radius: 8px;
+    padding: 0.75rem 2.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+#loading {
+    display: none;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.loading-text {
+    color: #7f8c8d;
+    margin-top: 1rem;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    color: #3498db;
+}
+
+#result {
+    margin-top: 2rem;
+    display: none;
+}
+
+#resultContent {
+    margin-top: 1.5rem;
+}
+
+/* Markdown content styling */
+#resultContent h1 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+#resultContent h2 {
+    font-size: 1.5rem;
+    color: #3498db;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#resultContent h3 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-top: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+#resultContent p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+#resultContent ul, #resultContent ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+#resultContent li {
+    margin-bottom: 0.5rem;
+}
+
+#resultContent strong {
+    font-weight: 600;
+}
+
+/* Form section styling */
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Alert styling */
+.alert {
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+}
