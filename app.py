@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from crewai_tools import SerperDevTool
+from flask_cors import CORS
 import os
 import time
 import logging
