@@ -1,3 +1,4 @@
 droll-agents
 __pycache__
 .env    
+.vercel

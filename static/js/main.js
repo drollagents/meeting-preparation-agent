@@ -3,6 +3,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingEl = document.getElementById('loading');
     const resultEl = document.getElementById('result');
     const resultContentEl = document.getElementById('resultContent');
+    const BACKEND_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000'
+        : 'https://meeting-preparation-agent.onrender.com';
+    
+    // Update fetch call
+    fetch(`${BACKEND_URL}/prepare_meeting`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+   
     
     // Add smooth scrolling to all links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
