@@ -27,6 +27,10 @@ def index():
     }
     return render_template('index.html', api_keys_set=api_keys_set)
 
+@app.route('/health')
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/prepare_meeting', methods=['POST'])
 def prepare_meeting():
     # Check for required API keys

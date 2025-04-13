@@ -1,4 +1,7 @@
 droll-agents
-__pycache__
+__pycache__/
 .env    
 .vercel
+*.pyc
+venv/
+.vscode/

@@ -108,8 +108,8 @@ lancedb==0.5.7
 langchain==0.1.20
 langchain-cohere==0.1.5
 langchain-community==0.0.38
-langchain-core==0.1.53
-langchain-experimental==0.3.4
+langchain-core==0.1.30
+langchain-experimental==0.0.52
 langchain-groq==0.1.5
 langchain-openai==0.1.7
 langchain-text-splitters==0.0.2
@@ -242,7 +242,6 @@ tzdata==2025.2
 urllib3==2.4.0
 uv==0.6.14
 uvicorn==0.34.0
-uvloop==0.21.0
 watchfiles==1.0.5
 wcwidth==0.2.13
 websocket-client==1.8.0
