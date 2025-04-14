@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger('meeting-prep')
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET'])
 def index():

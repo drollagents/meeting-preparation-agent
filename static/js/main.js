@@ -71,9 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         
         // Send data to the server
-        fetch('/prepare_meeting', {
+        fetch(`${BACKEND_URL}/prepare_meeting`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
         })
         .then(response => {
             if (!response.ok) {
