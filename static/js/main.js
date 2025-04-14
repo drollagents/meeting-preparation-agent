@@ -4,18 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultEl = document.getElementById('result');
     const resultContentEl = document.getElementById('resultContent');
     const BACKEND_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000'
-    : 'https://meeting-preparation-agent-drollagents.onrender.com';
-    
-    // Update fetch call
-    fetch(`${BACKEND_URL}/prepare_meeting`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-   
+        ? 'http://localhost:5000'
+        : 'https://meeting-preparation-agent-drollagents.onrender.com';
     
     // Add smooth scrolling to all links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -65,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 clearInterval(progressInterval);
             }
-        }, 12000); // Update every 12 seconds to roughly match actual processing time
+        }, 12000);
         
         // Collect form data
         const formData = new FormData(this);
@@ -122,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultContentEl.innerHTML = html;
                 }
                 
-                // Add copy button to each section
+                // Add copy buttons to each section
                 addCopyButtons();
             }, 300);
             
