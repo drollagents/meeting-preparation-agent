@@ -105,11 +105,11 @@ jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 kubernetes==32.0.1
 lancedb==0.5.7
-langchain==0.1.20
-langchain-cohere==0.1.5
-langchain-community==0.0.38
-langchain-core==0.1.30
-langchain-experimental==0.0.52
+langchain>=0.1.20
+langchain-cohere>=0.1.5
+langchain-community>=0.0.38
+langchain-core>=0.1.30
+langchain-experimental>=0.0.52
 langchain-groq==0.1.5
 langchain-openai==0.1.7
 langchain-text-splitters==0.0.2
