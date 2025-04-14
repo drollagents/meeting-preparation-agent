@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultEl = document.getElementById('result');
     const resultContentEl = document.getElementById('resultContent');
     const BACKEND_URL = window.location.hostname === 'localhost' 
-        ? 'http://localhost:5000'
-        : 'https://meeting-preparation-agent.onrender.com';
+    ? 'http://localhost:5000'
+    : 'https://meeting-preparation-agent-drollagents.onrender.com';
     
     // Update fetch call
     fetch(`${BACKEND_URL}/prepare_meeting`, {
