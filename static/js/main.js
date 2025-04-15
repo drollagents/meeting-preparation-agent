@@ -1,8 +1,22 @@
+/**
+ * Droll Agents - Meeting Preparation Agent JavaScript
+ * An AI-powered assistant for preparing comprehensive meeting materials.
+ */
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the application
+    initializeApp();
+});
+
+/**
+ * Initialize the application with all event listeners and UI enhancements
+ */
+function initializeApp() {
     const form = document.getElementById('meetingForm');
     const loadingEl = document.getElementById('loading');
     const resultEl = document.getElementById('result');
     const resultContentEl = document.getElementById('resultContent');
+    
+    // Define backend URL based on environment
     const BACKEND_URL = window.location.hostname === 'localhost' 
         ? 'http://localhost:5000'
         : 'https://meeting-preparation-agent-drollagents.onrender.com';
@@ -24,14 +38,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Disable form submission button to prevent multiple submissions
         const submitBtn = this.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+        
+        // Update button text with loading spinner
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner"><i class="fas fa-circle-notch fa-spin"></i></span> Processing...';
         
         // Show loading indicator with animation
         loadingEl.style.opacity = '0';
         loadingEl.style.display = 'block';
         setTimeout(() => {
             loadingEl.style.opacity = '1';
-            loadingEl.style.transition = 'opacity 0.3s ease';
+            loadingEl.style.transition = 'opacity 0.5s ease';
         }, 10);
         
         // Hide result if visible
@@ -69,14 +86,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .then(response => {
+            console.log("Response status:", response.status);
             if (!response.ok) {
                 return response.json().then(data => {
-                    throw new Error(data.error || 'An unknown error occurred');
+                    throw new Error(data.error || `Server returned ${response.status}: ${response.statusText}`);
                 });
             }
             return response.json();
         })
         .then(data => {
+            console.log("Received meeting preparation data");
+            
             // Clear progress interval
             clearInterval(progressInterval);
             
@@ -101,15 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.html_result) {
                     resultContentEl.innerHTML = data.html_result;
                 } else {
-                    // Parse markdown to HTML (simplified version as fallback)
-                    let html = data.result.replace(/\n/g, '<br>');
-                    html = html.replace(/^# (.*)/gm, '<h1>$1</h1>');
-                    html = html.replace(/^## (.*)/gm, '<h2>$1</h2>');
-                    html = html.replace(/^### (.*)/gm, '<h3>$1</h3>');
-                    html = html.replace(/\*\*(.*)\*\*/gm, '<strong>$1</strong>');
-                    html = html.replace(/\*(.*)\*/gm, '<em>$1</em>');
-                    
-                    resultContentEl.innerHTML = html;
+                    // Parse markdown to HTML
+                    const formattedResult = formatContent(data.result || "No results available");
+                    resultContentEl.innerHTML = formattedResult;
                 }
                 
                 // Add copy buttons to each section
@@ -118,9 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Re-enable submit button
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Meeting Materials';
+            submitBtn.innerHTML = originalBtnText;
         })
         .catch(error => {
+            console.error("Error:", error);
+            
             // Clear progress interval
             clearInterval(progressInterval);
             
@@ -138,65 +154,172 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 10);
                 
                 resultContentEl.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger">
                         <h4><i class="fas fa-exclamation-circle me-2"></i>Error</h4>
                         <p>${error.message}</p>
                         <p>Please check that you've set up the required API keys in your .env file.</p>
                     </div>
                 `;
                 
-                console.error('Error:', error);
-                
                 // Re-enable submit button
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Meeting Materials';
+                submitBtn.innerHTML = originalBtnText;
             }, 300);
         });
     });
     
-    // Function to add copy buttons to each section
-    function addCopyButtons() {
-        const headings = resultContentEl.querySelectorAll('h2');
-        headings.forEach(heading => {
-            // Create copy section button
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'btn btn-sm btn-outline-secondary ms-2';
-            copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-            copyBtn.title = 'Copy section';
-            copyBtn.style.fontSize = '0.8rem';
-            copyBtn.style.padding = '0.2rem 0.5rem';
-            
-            // Insert after heading text
-            heading.appendChild(copyBtn);
-            
-            // Get content to copy (everything between this h2 and the next h2)
-            copyBtn.addEventListener('click', function() {
-                let content = heading.outerHTML;
-                let nextEl = heading.nextElementSibling;
-                
-                while (nextEl && nextEl.tagName !== 'H2') {
-                    content += nextEl.outerHTML;
-                    nextEl = nextEl.nextElementSibling;
-                }
-                
-                // Create temporary textarea to copy content
-                const textarea = document.createElement('textarea');
-                textarea.value = content.replace(/<[^>]*>/g, ''); // Remove HTML tags
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                
-                // Show copied feedback
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                copyBtn.classList.add('btn-success');
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                    copyBtn.classList.remove('btn-success');
-                }, 2000);
-            });
+    // Add input field animations and enhancements
+    enhanceFormInputs();
+    
+    // Add hover effect to back button
+    const backButton = document.querySelector('.back-button');
+    if (backButton) {
+        backButton.addEventListener('mouseenter', function() {
+            const svg = this.querySelector('svg');
+            if (svg) {
+                svg.style.transform = 'translateX(-3px)';
+            }
+        });
+        
+        backButton.addEventListener('mouseleave', function() {
+            const svg = this.querySelector('svg');
+            if (svg) {
+                svg.style.transform = '';
+            }
         });
     }
-});
+}
+
+/**
+ * Enhance form inputs with focus and animation effects
+ */
+function enhanceFormInputs() {
+    // Add focus styles to form controls
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+            this.style.boxShadow = '0 0 0 3px rgba(0, 102, 204, 0.15)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+            this.style.boxShadow = '';
+        });
+    });
+    
+    // Focus first input field on page load
+    setTimeout(() => {
+        const firstInput = document.getElementById('company_name');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    }, 500);
+}
+
+/**
+ * Format the content with HTML formatting
+ * @param {string} text - The text to format
+ * @returns {string} - The formatted HTML
+ */
+function formatContent(text) {
+    // Format headers
+    let formatted = text.replace(/^# (.*)/gm, '<h1>$1</h1>');
+    formatted = formatted.replace(/^## (.*)/gm, '<h2>$1</h2>');
+    formatted = formatted.replace(/^### (.*)/gm, '<h3>$1</h3>');
+    
+    // Format bold and italic text
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Format lists
+    const listItems = formatted.split('\n').map(line => {
+        // Check for bullet points
+        if (line.trim().startsWith('- ')) {
+            return `<li>${line.trim().substring(2)}</li>`;
+        }
+        // Check for numbered lists
+        else if (/^\d+\.\s+/.test(line.trim())) {
+            return `<li>${line.trim().replace(/^\d+\.\s+/, '')}</li>`;
+        }
+        return line;
+    });
+    
+    // Group list items
+    let inList = false;
+    let htmlContent = [];
+    
+    for (let i = 0; i < listItems.length; i++) {
+        const item = listItems[i];
+        
+        if (item.startsWith('<li>') && !inList) {
+            htmlContent.push('<ul>');
+            inList = true;
+        } else if (!item.startsWith('<li>') && inList) {
+            htmlContent.push('</ul>');
+            inList = false;
+        }
+        
+        htmlContent.push(item);
+    }
+    
+    if (inList) {
+        htmlContent.push('</ul>');
+    }
+    
+    // Convert newlines to <br> tags for remaining text
+    formatted = htmlContent.join('\n').replace(/\n/g, '<br>');
+    
+    return formatted;
+}
+
+/**
+ * Add copy buttons to each section of the result
+ */
+function addCopyButtons() {
+    const headings = document.querySelectorAll('#resultContent h2');
+    headings.forEach(heading => {
+        // Create copy section button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn btn-sm btn-outline-primary ms-2';
+        copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+        copyBtn.title = 'Copy section';
+        copyBtn.style.fontSize = '0.8rem';
+        copyBtn.style.padding = '0.2rem 0.5rem';
+        
+        // Insert after heading text
+        heading.appendChild(copyBtn);
+        
+        // Get content to copy (everything between this h2 and the next h2)
+        copyBtn.addEventListener('click', function() {
+            let content = heading.innerText.replace('Copy', '').trim() + '\n\n'; // Start with the heading
+            let nextEl = heading.nextElementSibling;
+            
+            while (nextEl && nextEl.tagName !== 'H2') {
+                // Get the text content but not from any copy buttons
+                let text = nextEl.innerText;
+                content += text + '\n\n';
+                nextEl = nextEl.nextElementSibling;
+            }
+            
+            // Create temporary textarea to copy content
+            const textarea = document.createElement('textarea');
+            textarea.value = content.trim();
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            // Show copied feedback
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+            copyBtn.classList.add('btn-success');
+            copyBtn.classList.remove('btn-outline-primary');
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.classList.add('btn-outline-primary');
+                copyBtn.classList.remove('btn-success');
+            }, 2000);
+        });
+    });
+}
